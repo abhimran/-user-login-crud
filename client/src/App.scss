@@ -1,0 +1,82 @@
+@use './scss/' as *;
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  font-family: $font-family;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-x: hidden;
+  background-color: #ebe9e9;
+}
+
+a {
+  text-decoration: none;
+  color: unset;
+}
+
+button,
+input {
+  outline: 0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+.container {
+  max-width: 1660px;
+  margin: auto;
+}
+
+@mixin form-inputs {
+  height: auto !important;
+  font-size: 100% !important;
+  border-radius: 5px !important;
+  padding: 10px 15px !important;
+  border-color: transparent !important;
+}
+
+.form-control {
+  @include form-inputs;
+  color: $faded-black;
+  background-color: #ebe9e9;
+
+  &:focus {
+    box-shadow: none;
+    color: $faded-black;
+    background-color: #ebe9e9;
+    border-color: $gray !important;
+  }
+}
+
+.login {
+  min-height: 100vh;
+  overflow-y: auto;
+  background-color: #ebe9e9;
+  .login-page {
+    width: 400px;
+    margin: 0 auto;
+
+    .register-block {
+      background: $white;
+      border-radius: 5px;
+      box-shadow: 0 0 16px #e1dbdb;
+    }
+  }
+}
