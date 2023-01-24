@@ -1,25 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PageHeader from '../components/PageHeader';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import ModalComponent from '../components/ModalComponent';
+import { deleteRequest, getRequest } from '../api/handleReq';
 
 const UserList = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [userdata, setUserdata] = useState([
-    {
-      id: 1,
-      name: 'adasdsa',
-      username: 'adasda',
-      email: 'adasd',
-      status: 'adasd',
-    },
-    {
-      id: 2,
-      name: 'adasdsa',
-      username: 'adasda',
-      email: 'adasd',
-      status: 'adasd',
-    },
-  ]);
+  // states
+  const [userdata, setUserdata] = useState([]);
+  const [singleUserData, setSingleUserData] = useState({});
+
+  // get users
+  const getUsers = async () => {
+    try {
+      const resp = await getRequest(`/users`);
+      if (resp) {
+        setUserdata(resp?.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // delete users
+  const handleDelete = async (id) => {
+    try {
+      const resp = await deleteRequest(`/users/${id}`);
+      if (resp) {
+        const updateUserData = userdata.filter((user) => user.id !== id);
+        setUserdata(updateUserData);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   return (
     <div>
       <PageHeader />
@@ -30,7 +48,7 @@ const UserList = () => {
             <button className='btn btn-primary'>Add new user</button>
           </div>
 
-          <table class='table'>
+          <table className='table'>
             <thead>
               <tr className='table-dark'>
                 <th scope='col'>Id</th>
@@ -52,12 +70,20 @@ const UserList = () => {
                     <td>{element.email}</td>
                     <td>{element.status}</td>
                     <td className='d-flex justify-content-between'>
-                      <button className='btn btn-success'>
+                      <button
+                        className='btn btn-success'
+                        data-bs-toggle='modal'
+                        data-bs-target='#edit-modal'
+                        onClick={() => setSingleUserData(element)}
+                      >
                         <AiOutlineEdit />
                       </button>
                     </td>
                     <td>
-                      <button className='btn btn-primary'>
+                      <button
+                        className='btn btn-primary'
+                        onClick={() => handleDelete(element.id)}
+                      >
                         <AiOutlineDelete />
                       </button>
                     </td>
@@ -68,6 +94,7 @@ const UserList = () => {
           </table>
         </div>
       </div>
+      <ModalComponent user={singleUserData} />
     </div>
   );
 };
