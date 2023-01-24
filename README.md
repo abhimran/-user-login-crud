@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 ## Installing
 
 1. Clone the repository to your local machine.
-   git clone https://github.com/your-username/user-app.git
+   git clone https://github.com/abhimran/-user-login-crud.git
 
 2. Install the dependencies for the server by navigating to the root folder and running:
    cd server
