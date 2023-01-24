@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkValidationError, handleLogin, validate } from '../utils';
 
@@ -22,6 +22,7 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const [otherErros, setOthersErrors] = useState('');
+  const [tokenResult, setTokenResult] = useState('');
 
   const {
     fields: { username, email, password },
@@ -54,12 +55,22 @@ const Login = () => {
     });
   };
 
+  // set token res
   const handleTokenResult = (tokenResult) => {
     if (tokenResult) {
       setLoading(false);
-      navigate('/users');
+      setTokenResult(tokenResult.token);
+    } else {
+      setTokenResult('');
     }
   };
+
+  // redirect to user routes
+  useEffect(() => {
+    if (tokenResult) {
+      navigate('/users');
+    }
+  }, [tokenResult, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,11 +93,13 @@ const Login = () => {
           <div className='register-block p-5 mt-5'>
             <h5 className='text-center text-faded-black'>Log In</h5>
 
-            <p className='text-white my-2 p-3 bg-danger'>
-              {otherErros ? otherErros : ''}
-            </p>
+            {otherErros ? (
+              <p className='text-white mt-4 p-3 bg-danger'>{otherErros}</p>
+            ) : (
+              ''
+            )}
 
-            <form className='mt-5' onSubmit={handleSubmit}>
+            <form className='mt-4' onSubmit={handleSubmit}>
               <div className=''>
                 <input
                   type='text'
