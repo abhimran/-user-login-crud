@@ -3,11 +3,18 @@ import PageHeader from '../components/PageHeader';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import ModalComponent from '../components/ModalComponent';
 import { deleteRequest, getRequest } from '../api/handleReq';
+import Cookies from 'js-cookie';
+import jwt_decode from 'jwt-decode';
 
 const UserList = () => {
   // states
   const [userdata, setUserdata] = useState([]);
   const [singleUserData, setSingleUserData] = useState({});
+
+  // decode jwt
+  const token = Cookies.get('accessToken');
+  const decodedHeader = jwt_decode(token);
+  const userId = decodedHeader?.id;
 
   // get users
   const getUsers = async () => {
@@ -61,9 +68,9 @@ const UserList = () => {
               </tr>
             </thead>
             <tbody>
-              {userdata.map((element, id) => {
+              {userdata.map((element) => {
                 return (
-                  <tr key={id}>
+                  <tr key={element.id}>
                     <th scope='row'>{element.id}</th>
                     <td>{element.name}</td>
                     <td>{element.username}</td>
@@ -81,7 +88,9 @@ const UserList = () => {
                     </td>
                     <td>
                       <button
-                        className='btn btn-primary'
+                        className={`btn btn-primary ${
+                          element.id === userId ? 'disabled' : ''
+                        }`}
                         onClick={() => handleDelete(element.id)}
                       >
                         <AiOutlineDelete />

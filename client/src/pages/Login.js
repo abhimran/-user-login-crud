@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkValidationError, handleLogin, validate } from '../utils';
 
@@ -22,7 +22,6 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const [otherErros, setOthersErrors] = useState('');
-  const [tokenResult, setTokenResult] = useState('');
 
   const {
     fields: { username, email, password },
@@ -32,6 +31,7 @@ const Login = () => {
   const emailError = login.errors.email;
   const passwordError = login.errors.password;
 
+  // login button disabled class
   const isEnabled =
     username &&
     email &&
@@ -59,18 +59,9 @@ const Login = () => {
   const handleTokenResult = (tokenResult) => {
     if (tokenResult) {
       setLoading(false);
-      setTokenResult(tokenResult.token);
-    } else {
-      setTokenResult('');
-    }
-  };
-
-  // redirect to user routes
-  useEffect(() => {
-    if (tokenResult) {
       navigate('/users');
     }
-  }, [tokenResult, navigate]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
