@@ -1,34 +1,30 @@
 import './App.scss';
-import { Navigate, Routes, Route } from 'react-router-dom';
+import { Navigate, Routes, Route, BrowserRouter } from 'react-router-dom';
 import UserList from './pages/UserList';
 import Login from './pages/Login';
 import Cookies from 'js-cookie';
 
-const ProtectedRoute = ({ isAllowed, redirectPath = '/', children }) => {
-  if (!isAllowed) {
-    return <Navigate to={redirectPath} replace />;
-  }
-
-  return children ? children : <Login />;
+// Protected route
+const ProtectedRoute = () => {
+  return Cookies.get('accessToken') ? (
+    <UserList />
+  ) : (
+    <Navigate to='/login' exact />
+  );
 };
 
 const App = () => {
   return (
-    <Routes>
-      <Route path='/' element={<Login />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Navigate to='users' exact />} />
+        <Route path='/login' element={<Login />} />
 
-      <Route
-        path='users'
-        element={
-          <ProtectedRoute
-            redirectPath='/'
-            isAllowed={!!Cookies.get('accessToken')}
-          >
-            <UserList />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+        <Route element={<ProtectedRoute />}>
+          <Route path='/users' element={<UserList />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 
